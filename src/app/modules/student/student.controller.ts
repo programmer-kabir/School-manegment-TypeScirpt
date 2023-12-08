@@ -37,10 +37,10 @@ const getAllStudent = async (req: Request, res: Response) => {
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
-    const result = await studentServices.getSingleStudent(studentId);
+    const result = await studentServices.getSingleStudentData(studentId);
     res.status(200).json({
       success: true,
-      message: 'Students are retrieved succesfully',
+      message: 'Students are retrieved successfully',
       data: result,
     });
   } catch (err) {
@@ -48,8 +48,27 @@ const getSingleStudent = async (req: Request, res: Response) => {
   }
 };
 
+const deleteStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const result = await studentServices.deleteStudents(studentId);
+    res.status(200).json({
+      success: true,
+      message: 'Students are delete successfully',
+      data: result,
+    });
+  } catch (err:any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+      error: err,
+    });
+  }
+};
+
 export const studentController = {
   createStudent,
   getAllStudent,
   getSingleStudent,
+  deleteStudent
 };

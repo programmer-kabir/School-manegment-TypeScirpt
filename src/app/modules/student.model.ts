@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import bcrypt  from 'bcrypt';
+import bcrypt from 'bcrypt';
 import {
   StudentModel,
   TGuardian,
@@ -122,14 +122,35 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     default: 'active',
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+// password not see to response
+studentSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  return userObject;
+};
+
 //password save with hash
-studentSchema.pre('save', async function(next){
-  const user = this
-  user.password = await bcrypt.hash(user.password, Number(config.saltRounds))
+studentSchema.pre('save', async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.saltRounds));
+  next();
+});
+
+// Delete work
+studentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
   next()
-})
+});
+studentSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next()
+});
 
 studentSchema.statics.isUserExists = async function (id: string) {
   const exitingUser = await Student.findOne({ id });
