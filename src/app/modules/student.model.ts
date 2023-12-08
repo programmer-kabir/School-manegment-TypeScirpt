@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import bcrypt  from 'bcrypt';
 import {
   StudentModel,
   TGuardian,
@@ -6,6 +7,7 @@ import {
   TStudent,
   TUserName,
 } from './student/student.interface';
+import config from '../config';
 const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -65,6 +67,12 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, unique: true, required: [true, 'ID is required'] },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    maxlength: [20, 'Password can not be more than 20 characters'],
+    minLength: [8, 'Password can be more than 8 characters'],
+  },
   name: {
     type: userNameSchema,
     required: [true, 'Name is required'],
@@ -115,8 +123,16 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     default: 'active',
   },
 });
-studentSchema.statics.isUserExists = async function (id:string){
-  const exitingUser = await Student.findOne({id})
+
+//password save with hash
+studentSchema.pre('save', async function(next){
+  const user = this
+  user.password = await bcrypt.hash(user.password, Number(config.saltRounds))
+  next()
+})
+
+studentSchema.statics.isUserExists = async function (id: string) {
+  const exitingUser = await Student.findOne({ id });
   return exitingUser;
-}
+};
 export const Student = model<TStudent, StudentModel>('student', studentSchema);
