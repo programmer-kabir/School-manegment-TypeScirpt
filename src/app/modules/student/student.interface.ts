@@ -23,7 +23,7 @@ export type UserName = {
   export type Student = {
     id: string;
     name: UserName;
-    gender: 'male' | 'female';
+    gender: 'male' | 'female'|'other';
     dateOfBirth?: string;
     email: string;
     contactNo: string;
@@ -36,6 +36,5 @@ export type UserName = {
     profileImg?: string;
     isActive: 'active' | 'blocked';
   };
-
 
  
