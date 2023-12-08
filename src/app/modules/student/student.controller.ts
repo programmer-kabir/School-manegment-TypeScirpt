@@ -25,26 +25,56 @@ const createStudent = async (req: Request, res: Response) => {
 const getAllStudent = async (req: Request, res: Response) => {
   try {
     const result = await studentServices.getAllStudent();
-    res.status(200).json({
-      success: true,
-      message: 'Students are retrieved succesfully',
-      data: result,
+    if (!result || result.length === 0) {
+      res.status(404).json({
+        success: false,
+        message: 'something went wrong on fetching',
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Student fetched successfully!',
+        data: result,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'something went wrong on fetching',
+      error,
     });
-  } catch (err) {
-    console.log(err);
+  
   }
 };
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
     const result = await studentServices.getSingleStudentData(studentId);
-    res.status(200).json({
-      success: true,
-      message: 'Students are retrieved successfully',
-      data: result,
-    });
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: result,
+      });
+    }
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
   }
 };
 
