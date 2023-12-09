@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import bcrypt from 'bcrypt';
 import {
   StudentModel,
   TGuardian,
@@ -68,12 +67,13 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, unique: true, required: [true, 'ID is required'] },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      maxlength: [20, 'Password can not be more than 20 characters'],
-      minLength: [8, 'Password can be more than 8 characters'],
+    user:{
+      type:Schema.Types.ObjectId,
+      required:true, 
+      unique:true,
+      ref:"User"
     },
+    
     name: {
       type: userNameSchema,
       required: [true, 'Name is required'],
@@ -119,14 +119,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Local Guardian is required'],
     },
     profileImg: { type: String },
-    isActive: {
-      type: String,
-      enum: {
-        values: ['active', 'blocked'],
-        message: '{VALUE} is not a valid status',
-      },
-      default: 'active',
-    },
+    
     isDeleted: {
       type: Boolean,
       default: false,
@@ -145,19 +138,6 @@ studentSchema.virtual('fullName').get(function () {
   return this.name.firstName + this.name.middleName + this.name.lastName;
 });
 
-// password not see to response
-studentSchema.methods.toJSON = function () {
-  const userObject = this.toObject();
-  delete userObject.password;
-  return userObject;
-};
-
-//password save with hash
-studentSchema.pre('save', async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.saltRounds));
-  next();
-});
 
 // Delete work
 studentSchema.pre('find', function (next) {

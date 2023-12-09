@@ -5,5 +5,6 @@ dotenv.config({path:path.join((process.cwd(),'.env'))})
 export default {
     port:process.env.PORT,
     database_url:process.env.DATABASE_URL,
-    saltRounds:process.env.SALT_ROUNDS
+    saltRounds:process.env.SALT_ROUNDS,
+    defaultPassword:process.env.DEFAULT_PASS,
 }
