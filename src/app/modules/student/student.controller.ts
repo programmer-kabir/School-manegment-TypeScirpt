@@ -1,12 +1,11 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { studentServices } from './student.service';
-import studentValidationSchema from './student.validation';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 
 const getAllStudent = catchAsync(async (req, res) => {
-  const result = await studentServices.getAllStudent();
+  const result = await studentServices.getAllStudentIntoDb();
   if (!result || result.length === 0) {
     sendResponse(res, {
       success: false,

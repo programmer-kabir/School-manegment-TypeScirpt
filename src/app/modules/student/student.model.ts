@@ -67,13 +67,13 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, unique: true, required: [true, 'ID is required'] },
-    user:{
-      type:Schema.Types.ObjectId,
-      required:true, 
-      unique:true,
-      ref:"User"
+    user: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      unique: true,
+      ref: 'User',
     },
-    
+
     name: {
       type: userNameSchema,
       required: [true, 'Name is required'],
@@ -86,7 +86,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       },
       required: [true, 'Gender is required'],
     },
-    dateOfBirth: { type: String },
+    dateOfBirth: { type: Date },
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -119,7 +119,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Local Guardian is required'],
     },
     profileImg: { type: String },
-    
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
+      // required: [true, 'Semester is required'],
+    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -137,7 +141,6 @@ studentSchema.virtual('fullName').get(function () {
   // return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
   return this.name.firstName + this.name.middleName + this.name.lastName;
 });
-
 
 // Delete work
 studentSchema.pre('find', function (next) {
