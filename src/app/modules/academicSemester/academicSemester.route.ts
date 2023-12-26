@@ -13,7 +13,7 @@ router.get(
   AcademicSemesterControllers.getAllAcademicSemester,
 );
 router.get(
-  '/all-academicSemester/:id',
+  '/all-academicSemester/:semesterId',
   AcademicSemesterControllers.getSingleAcademicSemester,
 );
 export const AcademicSemesterRoutes = router;

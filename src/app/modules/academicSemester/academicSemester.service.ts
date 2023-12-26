@@ -14,7 +14,7 @@ const getAllAcademicSemesterIntoDb = async () => {
   return result;
 };
 const getSingleAcademicSemesterIntoDb = async (id:string) => {
-  const result = await AcademicSemester.findOne({id});
+  const result = await AcademicSemester.findById(id);
   return result;
 };
 

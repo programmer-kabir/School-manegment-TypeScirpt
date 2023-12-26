@@ -8,7 +8,7 @@ const getAllStudentIntoDb = async () => {
 };
 
 const getSingleStudentData = async (id: string) => {
-  const result = await Student.findOne({ id });
+  const result = await Student.findById( id );
   return result;
 };
 const deleteStudents = async (id: string) => {

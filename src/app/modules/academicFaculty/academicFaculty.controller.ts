@@ -1,4 +1,3 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
@@ -35,9 +34,9 @@ const getAllAcademicFaulty = catchAsync(async (req, res) => {
 });
 
 const getSingleAcademicFaulty = catchAsync(async (req, res) => {
-  const { semesterId } = req.params;
+  const { facultyId } = req.params;
   const result =
-    await AcademicFacultyServices.getSingleAcademicFacultyFromDb(semesterId);
+    await AcademicFacultyServices.getSingleAcademicFacultyFromDb(facultyId);
   if (!result) {
     sendResponse(res, {
       success: false,
