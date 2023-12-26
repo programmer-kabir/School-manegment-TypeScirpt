@@ -25,7 +25,7 @@ export type TLocalGuardian = {
 export type TStudent = {
   id: string;
   user:Types.ObjectId;
-  password:string,
+  password?:string,
   name: TUserName;
   gender: 'male' | 'female' | 'other';
   dateOfBirth?: Date;
@@ -39,7 +39,8 @@ export type TStudent = {
   localGuardian: TLocalGuardian;
   profileImg?: string;
   admissionSemester:Types.ObjectId;
-  isDeleted:boolean
+  isDeleted:boolean,
+  academicDepartment: Types.ObjectId;
 };
 
 // user exiting using static method
